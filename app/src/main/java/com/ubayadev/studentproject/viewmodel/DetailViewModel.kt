@@ -14,6 +14,8 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.ubayadev.studentproject.databinding.FragmentStudentListBinding
 import com.ubayadev.studentproject.model.Student
 
@@ -23,17 +25,23 @@ class DetailViewModel(application: Application): AndroidViewModel(application)  
     var queue: RequestQueue? = null
 
 
-    fun fetch(student: Student) {
+    fun fetch(id: String?) {
         queue = Volley.newRequestQueue(getApplication())
         val url = "https://www.jsonkeeper.com/b/LLMW"
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,
-            {Log.d("showvoley", it)},
+            {
+                val sType = object : TypeToken<List<Student>>() { }.type
+                val result = Gson().fromJson<List<Student>>(it, sType) as ArrayList
+                val student = result.find { it.id == id } as Student
+                studentLD.value = student
+                Log.d("showvoley", it)
+            },
             {Log.d("showvoley", it.toString())})
         stringRequest.tag = TAG
         queue?.add(stringRequest)
-        studentLD.value = student
+
     }
 }
 
