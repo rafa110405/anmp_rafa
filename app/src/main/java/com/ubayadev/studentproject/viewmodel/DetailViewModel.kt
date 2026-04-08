@@ -3,6 +3,7 @@ package com.ubayadev.studentproject.viewmodel
 import android.app.Application
 import android.app.DownloadManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +29,8 @@ class DetailViewModel(application: Application): AndroidViewModel(application)  
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,
-            {},
-            {})
+            {Log.d("showvoley", it)},
+            {Log.d("showvoley", it.toString())})
         stringRequest.tag = TAG
         queue?.add(stringRequest)
         studentLD.value = student
